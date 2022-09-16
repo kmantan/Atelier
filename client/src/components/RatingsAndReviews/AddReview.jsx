@@ -39,7 +39,8 @@ export default function AddReview({ productId, toggleShowReview, metaData, getRe
     width: "50vw",
     backgroundColor: "white",
     position: "fixed",
-    paddingTop: "40px"
+    paddingTop: "40px",
+    overflow: "overlay"
   };
 
   const reviewData = {
