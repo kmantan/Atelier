@@ -18,7 +18,7 @@ class Index extends React.Component {
     this.state = {
       curr_product_id: 71700,
       curr_product_name: "Slacker's Slacks",
-      curr_product_features: "",
+      curr_product_features: [],
       url_path: "/71700",
     };
     this.updateCurrentProduct = this.updateCurrentProduct.bind(this);
@@ -46,7 +46,7 @@ class Index extends React.Component {
     });
     window.history.pushState('', 'Atelier', p_id);
 
-    Axios.get('/products', {params: { p_id: this.state.curr_product_id }})
+    Axios.get('/products', {params: { p_id: p_id }})
       .then((res) => {
         this.setState({
           curr_product_name: res.data.name,
@@ -55,7 +55,7 @@ class Index extends React.Component {
       })
       .catch((err) => {
       console.log(err);
-    });
+      });
   }
 
   renderStarRating(rating) {
