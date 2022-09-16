@@ -18,12 +18,25 @@ class Index extends React.Component {
     this.state = {
       curr_product_id: 71700,
       curr_product_name: "Slacker's Slacks",
-      url_path: "/71719",
-      numReviews: 0,
+      curr_product_features: "",
+      url_path: "/71700",
     };
     this.updateCurrentProduct = this.updateCurrentProduct.bind(this);
     this.renderStarRating = this.renderStarRating.bind(this);
-    this.updateNumReviews = this.updateNumReviews.bind(this);
+    this.getProductFeatures = this.getProductFeatures.bind(this);
+  }
+
+  getProductFeatures () {
+    Axios.get('/products', {params: { p_id: this.state.curr_product_id }})
+      .then((res) => {
+        this.setState({
+          curr_product_name: res.data.name,
+          curr_product_features: res.data.features
+        });
+      })
+      .catch((err) => {
+      console.log(err);
+      });
   }
 
   updateCurrentProduct(p_id) {
@@ -31,11 +44,18 @@ class Index extends React.Component {
       url_path: p_id,
       curr_product_id: p_id,
     });
-    window.history.pushState("", "Atelier", this.state.url_path);
-  }
+    window.history.pushState('', 'Atelier', p_id);
 
-  updateNumReviews(newNumReviews) {
-    this.setState({ numReviews: newNumReviews });
+    Axios.get('/products', {params: { p_id: this.state.curr_product_id }})
+      .then((res) => {
+        this.setState({
+          curr_product_name: res.data.name,
+          curr_product_features: res.data.features
+        });
+      })
+      .catch((err) => {
+      console.log(err);
+    });
   }
 
   renderStarRating(rating) {
@@ -47,10 +67,9 @@ class Index extends React.Component {
       } else if (i > rating && rating + 1 > i) {
         var ratingDifference = i - rating;
         if(ratingDifference < 0.5){
-          stars.push(<QuarterStar className="reviews-QuarterStar" key={i} />);
+          stars.push(<ThreeQuarterStar className="reviews-QuarterStar" key={i} />);
         } else if (ratingDifference >= 0.75) {
-          stars.push(<ThreeQuarterStar className="reviews-ThreeQuarterStar" key={i} />);
-          console.log(ratingDifference)
+          stars.push(<QuarterStar className="reviews-ThreeQuarterStar" key={i} />);
         } else {
           stars.push(<FaStarHalfAlt className="reviews-halfStar" key={i} />) ;
         }
@@ -65,7 +84,8 @@ class Index extends React.Component {
   }
 
   componentDidMount() {
-    window.history.pushState("", "Atelier", this.state.url_path);
+    window.history.pushState('', 'Atelier', this.state.url_path);
+    this.getProductFeatures();
   }
 
   render() {
@@ -80,6 +100,14 @@ class Index extends React.Component {
           curr_product_id={this.state.curr_product_id}
           renderStars={this.renderStarRating}
         />
+        <WrappedRelatedItemsAndOutfits
+        renderStarRating={this.renderStarRating}
+          updateCurrentProduct={this.updateCurrentProduct}
+          p_id={this.state.curr_product_id}
+          currentProduct={this.state.curr_product_name}
+          currentFeatures={this.state.curr_product_features}
+          renderStarRating={this.renderStarRating}
+        />
         <WrappedQandA
           curr_product_id={this.state.curr_product_id}
           curr_product_name={this.state.curr_product_name}
@@ -88,28 +116,6 @@ class Index extends React.Component {
           currProduct={this.state.curr_product_id}
           renderStarRating={this.renderStarRating}
           productName={this.state.curr_product_name}
-          updateNum={this.updateNumReviews}
-          numReviews={this.state.numReviews}
-        />
-        <WrappedRelatedItemsAndOutfits
-        renderStarRating={this.renderStarRating}
-          updateCurrentProduct={this.updateCurrentProduct}
-          p_id={this.state.curr_product_id}
-          currentProduct={this.state.curr_product_name}
-          currentFeatures={[
-            {
-              feature: "Sole",
-              value: "Rubber",
-            },
-            {
-              feature: "Material",
-              value: "FullControlSkin",
-            },
-            {
-              feature: "Stitching",
-              value: "Double Stitch",
-            },
-          ]}
         />
       </div>
     );

@@ -57,6 +57,7 @@ export default function AddReview({ productId, toggleShowReview, metaData, getRe
 
   function sendReview(e) {
       e.preventDefault();
+      var fieldsComplete = true;
 
       if(reviewData.body.length < 50 || reviewData.body.length > 1000) {
         alert("Review body must be between 50 and 1000 characters in length");
@@ -66,7 +67,7 @@ export default function AddReview({ productId, toggleShowReview, metaData, getRe
           if(typeof reviewData[field] === "string") {
             if(reviewData[field] === "") {
               alert("Please ensure " + field + " is entered properly");
-              setFieldsComplete(false);
+              fieldsComplete=false;
             }
           }
         }

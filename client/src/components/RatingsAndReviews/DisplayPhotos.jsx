@@ -22,4 +22,3 @@ export default function DisplayPhotos ({photo, toggleDisplayPhoto}) {
     </div>
   )
 }
-
