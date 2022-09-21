@@ -150,7 +150,7 @@ export default function AddReview({ productId, toggleShowReview, metaData, getRe
         <Characteristics metaData={metaData} reviewData={reviewData}/>
         </div>
         <UploadPhotos photos={reviewData.photos}/>
-        <button type="submit" style={{width: "75px", marginLeft: "10px"}} onClick={sendReview}>Submit</button>
+        <button type="submit" style={{width: "75px", marginLeft: "10px", marginBottom: "10px"}} onClick={sendReview}>Submit</button>
       </div>
     </form>
   );
